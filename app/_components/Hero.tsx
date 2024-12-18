@@ -16,7 +16,6 @@ function Hero() {
             adventures to life and spark their passion for reading. It only
             takes a few seconds!
           </p>
-          {/* https://youtu.be/bxhDP-e4NDA?t=2703 */}
           <Link href={"/create-story"}>
             <Button
               color="primary"
