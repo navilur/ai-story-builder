@@ -1,29 +1,23 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-import { fieldData } from "../page";
+import { OptionField } from "./StoryType";
 
-export interface OptionField {
-  label: string;
-  imageUrl: string;
-  isFree: boolean;
-}
-
-function StoryType({ userSelection }: any) {
+function AgeGroup({ userSelection }: any) {
   const OptionList = [
     {
-      label: "Story Book",
-      imageUrl: "/story.png",
+      label: "0-2 Years",
+      imageUrl: "/02Years.png",
       isFree: true,
     },
     {
-      label: "Bed Story",
-      imageUrl: "/bedstory.png",
+      label: "3-5 Years",
+      imageUrl: "/35Years.png",
       isFree: true,
     },
     {
-      label: "Educational",
-      imageUrl: "/educational.png",
+      label: "5-8 Years",
+      imageUrl: "/58Years.png",
       isFree: true,
     },
   ];
@@ -34,14 +28,14 @@ function StoryType({ userSelection }: any) {
     setSelectedOption(item.label);
     userSelection({
       fieldValue: item?.label,
-      fieldName: "storyType",
+      fieldName: "ageGroup",
     });
   };
 
   return (
     <div>
       <label htmlFor="" className="font-bold text-4xl text-primary">
-        2. Story Type
+        3. Age Group
       </label>
       <div className="grid xl:grid-cols-3 grid-cols-2 gap-5 mt-4">
         {OptionList.map((item, index) => (
@@ -70,4 +64,4 @@ function StoryType({ userSelection }: any) {
   );
 }
 
-export default StoryType;
+export default AgeGroup;

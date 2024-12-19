@@ -1,29 +1,28 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-import { fieldData } from "../page";
+import { OptionField } from "./StoryType";
 
-export interface OptionField {
-  label: string;
-  imageUrl: string;
-  isFree: boolean;
-}
-
-function StoryType({ userSelection }: any) {
+function ImageStyle({ userSelection }: any) {
   const OptionList = [
     {
-      label: "Story Book",
-      imageUrl: "/story.png",
+      label: "3D Cartoon",
+      imageUrl: "/3D.png",
       isFree: true,
     },
     {
-      label: "Bed Story",
-      imageUrl: "/bedstory.png",
+      label: "Paper Cut",
+      imageUrl: "/paperCut.png",
       isFree: true,
     },
     {
-      label: "Educational",
-      imageUrl: "/educational.png",
+      label: "Water Color",
+      imageUrl: "/waterColor.png",
+      isFree: true,
+    },
+    {
+      label: "Pixel Style",
+      imageUrl: "/pixel.png",
       isFree: true,
     },
   ];
@@ -34,14 +33,14 @@ function StoryType({ userSelection }: any) {
     setSelectedOption(item.label);
     userSelection({
       fieldValue: item?.label,
-      fieldName: "storyType",
+      fieldName: "imageStyle",
     });
   };
 
   return (
     <div>
       <label htmlFor="" className="font-bold text-4xl text-primary">
-        2. Story Type
+        3. Image Style
       </label>
       <div className="grid xl:grid-cols-3 grid-cols-2 gap-5 mt-4">
         {OptionList.map((item, index) => (
@@ -61,7 +60,7 @@ function StoryType({ userSelection }: any) {
               alt={item.label}
               width={300}
               height={500}
-              className="object-cover h-[260px] rounded-3xl"
+              className="object-cover h-[120px] rounded-3xl"
             />
           </div>
         ))}
@@ -70,4 +69,4 @@ function StoryType({ userSelection }: any) {
   );
 }
 
-export default StoryType;
+export default ImageStyle;

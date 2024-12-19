@@ -1,20 +1,36 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import StorySubjectInput from "./_components/StorySubjectInput";
 import StoryType from "./_components/StoryType";
+import AgeGroup from "./_components/AgeGroup";
+import ImageStyle from "./_components/ImageStyle";
+import { Button } from "@nextui-org/button";
 
 export interface fieldData {
   fieldValue: string;
   fieldName: string;
 }
 
+export interface formDataType {
+  storySubject: string;
+  storyType: string;
+  imageStyle: string;
+  ageGroup: string;
+}
+
 function CreateStory() {
+  const [formData, setFormData] = useState<formDataType>();
+
   const onHandelUserSelection = (data: fieldData) => {
-    console.log(data);
+    setFormData((prev: any) => ({
+      ...prev,
+      [data.fieldName]: data.fieldValue,
+    }));
+    console.log(formData);
   };
 
   return (
-    <div className="p-10 md:px-20 lg:px-40">
+    <div className="p-10 md:px-20 xl:px-40">
       <h2 className="font-extrabold text-[70px] uppercase text-primary text-center">
         Create Your Story
       </h2>
@@ -27,11 +43,18 @@ function CreateStory() {
         <StorySubjectInput userSelection={onHandelUserSelection} />
 
         {/* Story Type */}
-        <StoryType />
+        <StoryType userSelection={onHandelUserSelection} />
 
         {/* Age Group */}
+        <AgeGroup userSelection={onHandelUserSelection} />
 
         {/* Image Style */}
+        <ImageStyle userSelection={onHandelUserSelection} />
+      </div>
+      <div className="flex justify-end mt-5">
+        <Button color="primary" className="p-10 text-2xl">
+          Generate Story
+        </Button>
       </div>
     </div>
   );
