@@ -5,6 +5,14 @@ import StoryType from "./_components/StoryType";
 import AgeGroup from "./_components/AgeGroup";
 import ImageStyle from "./_components/ImageStyle";
 import { Button } from "@nextui-org/button";
+import { chatSession } from "@/config/GeminiAI";
+import { db } from "@/config/db";
+import { StoryData } from "@/config/schema";
+// @ts-ignore
+import uuid4 from "uuid4";
+import CustomLoader from "./_components/CustomLoader";
+
+const CREATE_STORY_PROMPT = process.env.NEXT_PUBLIC_CREATE_STORY_PROMPT;
 
 export interface fieldData {
   fieldValue: string;
@@ -20,6 +28,7 @@ export interface formDataType {
 
 function CreateStory() {
   const [formData, setFormData] = useState<formDataType>();
+  const [loading, setLoading] = useState(false);
 
   const onHandelUserSelection = (data: fieldData) => {
     setFormData((prev: any) => ({
@@ -27,6 +36,54 @@ function CreateStory() {
       [data.fieldName]: data.fieldValue,
     }));
     console.log(formData);
+  };
+
+  const GenerateStory = async () => {
+    setLoading(true);
+    const FINAL_PROMPT = CREATE_STORY_PROMPT?.replace(
+      "{ageGroup}",
+      formData?.ageGroup ?? ""
+    )
+      .replace("{storyType}", formData?.storyType ?? "")
+      .replace("{storySubject}", formData?.storySubject ?? "")
+      .replace("{imageStyle}", formData?.imageStyle ?? "");
+
+    // Generate AI Story
+    try {
+      const result = await chatSession.sendMessage(FINAL_PROMPT);
+      console.log(result?.response.text());
+      const response = await SaveInDB(result?.response.text());
+      console.log(response);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+
+    // Generate Image
+  };
+
+  const SaveInDB = async (output: string) => {
+    const recordId = uuid4();
+    setLoading(true);
+    try {
+      const result = await db
+        .insert(StoryData)
+        .values({
+          storyId: recordId,
+          ageGroup: formData?.ageGroup,
+          storySubject: formData?.storySubject,
+          storyType: formData?.storyType,
+          imageStyle: formData?.imageStyle,
+          output: JSON.parse(output),
+        })
+        .returning({ storyId: StoryData?.storyId });
+      setLoading(false);
+      return result;
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   };
 
   return (
@@ -52,10 +109,16 @@ function CreateStory() {
         <ImageStyle userSelection={onHandelUserSelection} />
       </div>
       <div className="flex justify-end mt-5">
-        <Button color="primary" className="p-10 text-2xl">
+        <Button
+          color="primary"
+          className="p-10 text-2xl"
+          onPress={GenerateStory}
+          isDisabled={loading}>
           Generate Story
         </Button>
       </div>
+      <CustomLoader isLoading={loading} />
+      {/* https://youtu.be/bxhDP-e4NDA?t=8213 */}
     </div>
   );
 }

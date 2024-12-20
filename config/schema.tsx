@@ -10,5 +10,3 @@ export const StoryData = pgTable("sortyData", {
   output: json("output"),
   coverImage: varchar("coverImage"),
 });
-
-// https://youtu.be/bxhDP-e4NDA?t=6623
